@@ -8,7 +8,7 @@ TOP_DIR  = ../..
 include $(TOP_DIR)/buildenv.mk
 
 CERT_UTIL_DIR   := ../ttls
-PREBUILD_OPENSSL_PATH ?= $(ROOT_DIR)/prebuilt/dcap/openssl
+PREBUILD_OPENSSL_PATH ?= $(ROOT_DIR)/../external/dcap_source/prebuilt/openssl
 CBOR_PATH ?= $(LINUX_EXTERNAL_DIR)/cbor
 LIBCBOR_PATH := $(CBOR_PATH)/untrusted/lib
 CBOR_INCLUDE := $(CBOR_PATH)/untrusted/include

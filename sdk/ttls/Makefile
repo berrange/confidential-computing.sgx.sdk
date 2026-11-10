@@ -18,7 +18,7 @@ else
         SGXSSL_TCRYPTO = sgx_tsgxssl_crypto
 endif
 
-PREBUILT_OPENSSL_PATH ?= $(ROOT_DIR)/prebuilt/dcap/openssl
+PREBUILT_OPENSSL_PATH ?= $(ROOT_DIR)/../external/dcap_source/prebuilt/openssl
 CBOR_PATH ?= $(LINUX_EXTERNAL_DIR)/cbor
 CBOR_RELATIVE_PATH ?= ../../external/cbor
 
