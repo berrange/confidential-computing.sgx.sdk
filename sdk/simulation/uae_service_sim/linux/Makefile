@@ -9,9 +9,6 @@ include $(TOP_DIR)/buildenv.mk
 
 get_version_name = $(addsuffix _VERSION,$(shell echo $(subst _deploy,,$(subst libsgx_,,$(basename $1))) | tr a-z A-Z))
 
-PREBUILT_OPENSSL_DIR := $(ROOT_DIR)/prebuilt/dcap/openssl
-CRYPTO_LIB := -L$(PREBUILT_OPENSSL_DIR)/lib/linux64 -lcrypto
-
 INCLUDES := -I..                                                   \
             -I$(COMMON_DIR)/inc                                    \
             -I$(COMMON_DIR)/inc/internal                           \
@@ -19,7 +16,7 @@ INCLUDES := -I..                                                   \
             -I$(LINUX_SDK_DIR)/simulation/tinst                    \
             -I$(LINUX_SDK_DIR)/simulation/urtssim                  \
             -I$(LINUX_EXTERNAL_DIR)/rdrand/                        \
-            -I$(PREBUILT_OPENSSL_DIR)/inc
+            $(OPENSSL_CRYPTO_CFLAGS)
 
 
 CXXFLAGS += -Wall -fPIC $(INCLUDES) -Werror -g $(CET_FLAGS)
@@ -31,7 +28,7 @@ RDRAND_MAKEFILE := $(RDRAND_LIBDIR)/Makefile
 
 EXTERNAL_LIB += -L$(RDRAND_LIBDIR) -lrdrand
 EXTERNAL_LIB += -L$(RDRAND_LIBDIR) -lrt
-EXTERNAL_LIB += -ldl $(CRYPTO_LIB)
+EXTERNAL_LIB += -ldl $(OPENSSL_CRYPTO_LDFLAGS)
 
 vpath %.cpp $(LINUX_SDK_DIR)/simulation/urtssim \
             $(COMMON_DIR)/src

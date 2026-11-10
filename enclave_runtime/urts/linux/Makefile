@@ -18,8 +18,6 @@ CFLAGS += -fPIC -Werror -g
 CFLAGS += $(ADDED_INC)
 
 VTUNE_DIR = $(LINUX_EXTERNAL_DIR)/vtune/linux
-PREBUILT_OPENSSL_DIR := $(ROOT_DIR)/prebuilt/dcap/openssl
-CRYPTO_LIB := -L$(PREBUILT_OPENSSL_DIR)/lib/linux64 -lcrypto
 
 INC += -I$(SGX_HEADER_DIR)                \
        -I$(COMMON_DIR)/inc/               \
@@ -31,15 +29,15 @@ INC += -I$(SGX_HEADER_DIR)                \
        -I$(LINUX_ENCLAVE_RUNTIME_DIR)/urts/parser     \
        -I$(VTUNE_DIR)/include \
        -I$(VTUNE_DIR)/sdk/src/ittnotify   \
-       -I$(PREBUILT_OPENSSL_DIR)/inc \
+       $(OPENSSL_CRYPTO_CFLAGS) \
        -I$(LINUX_EXTERNAL_DIR)/sgx-emm/emm_src/include
 
 LDFLAGS := -lwrapper
 INTERNAL_LDFLAGS := -lwrapper
 LDFLAGS += $(COMMON_LDFLAGS) -Wl,-Bdynamic -L$(BUILD_DIR) -lsgx_enclave_common -lpthread
 INTERNAL_LDFLAGS += $(COMMON_LDFLAGS) -lpthread
-LDFLAGS += -L$(VTUNE_DIR)/sdk/src/ittnotify -littnotify -ldl $(CRYPTO_LIB)
-INTERNAL_LDFLAGS += -L$(VTUNE_DIR)/sdk/src/ittnotify -littnotify -ldl $(CRYPTO_LIB)
+LDFLAGS += -L$(VTUNE_DIR)/sdk/src/ittnotify -littnotify -ldl $(OPENSSL_CRYPTO_LDFLAGS)
+INTERNAL_LDFLAGS += -L$(VTUNE_DIR)/sdk/src/ittnotify -littnotify -ldl $(OPENSSL_CRYPTO_LDFLAGS)
 LDFLAGS += -Wl,--version-script=urts.lds -Wl,--gc-sections
 INTERNAL_LDFLAGS += -Wl,--version-script=urts_internal.lds -Wl,--gc-sections
 
