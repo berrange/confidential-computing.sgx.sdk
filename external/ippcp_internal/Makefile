@@ -5,6 +5,7 @@
 
 include ../../buildenv.mk
 
+IPP_USE_GIT := 1
 IPP_SOURCE = ipp-crypto
 INSTALL_DIR=install
 IPP_CONFIG = -Bbuild -DCMAKE_VERBOSE_MAKEFILE=on -DCMAKE_INSTALL_PREFIX=./$(INSTALL_DIR)
@@ -59,6 +60,7 @@ build_ipp: $(CHECK_SOURCE)
 	cd $(IPP_SOURCE) && $(PRE_CONFIG) cmake CMakeLists.txt $(IPP_CONFIG) && cd build && make ippcp_s && make install
 
 $(IPP_SOURCE)/build:
+ifeq ($(IPP_USE_GIT), 1)
 ifeq ($(shell git rev-parse --is-inside-work-tree), true)
 	git submodule update -f --init --recursive --remote -- $(IPP_SOURCE)
 else
@@ -66,6 +68,7 @@ else
 	git clone -b cryptography-primitives_2_2_0 https://github.com/intel/cryptography-primitives --depth 1 $(IPP_SOURCE)
 endif
 	cd $(IPP_SOURCE) && git apply ../0001-Cryptography-Primitives-for-SGX.patch
+endif
 	mkdir -p $(IPP_SOURCE)/build $(IPP_SOURCE)/$(INSTALL_DIR)
 
 disp: all
